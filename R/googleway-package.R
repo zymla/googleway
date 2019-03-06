@@ -133,7 +133,8 @@ downloadData <- function(map_url, simplify, curl_proxy = NULL){
     con <- curl_proxy(map_url)
   } else {
     ## check for a valid connection
-    if(curl::has_internet() == FALSE)
+    ## curl::has_internet often fails behind a proxy, so we first check if one is active through ENV
+    if(!any(str_detect(str_to_lower(names(Sys.getenv())), '^https?_proxy')) && curl::has_internet() == FALSE)
       stop("Can not retrieve results. No valid internet connection (tested using curl::has_internet() )")
   
     con <- curl::curl(map_url)
