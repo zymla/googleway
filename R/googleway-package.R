@@ -128,14 +128,14 @@ downloadData <- function(map_url, simplify, curl_proxy = NULL){
   if(length(map_url) > 1)
     stop("invalid map_url")
 
-  ## check for a valid connection
-  if(curl::has_internet() == FALSE)
-    stop("Can not retrieve results. No valid internet connection (tested using curl::has_internet() )")
-
   ## if a proxy has been passed in, use it
   if(!is.null(curl_proxy)){
     con <- curl_proxy(map_url)
   } else {
+    ## check for a valid connection
+    if(curl::has_internet() == FALSE)
+      stop("Can not retrieve results. No valid internet connection (tested using curl::has_internet() )")
+  
     con <- curl::curl(map_url)
   }
 
